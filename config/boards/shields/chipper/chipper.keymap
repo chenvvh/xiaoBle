@@ -3,42 +3,48 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
-#define XXX &none
-#define ___ &trans
-
-#define COMBO_TIMEOUT 60
-
-#define DEF 0
-#define NAV 1
-#define FN 2
-#define NUM 3
-#define SYS 4
-
-/ {
-    macros {
-	nayeon: nayeon {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings
-                = <&macro_tap_time 10>
-		,<&macro_tap &kp N &kp A &kp Y &kp E &kp O &kp N &kp RET>;
-        };
-    };
-};
-
 / {
     combos {
         compatible = "zmk,combos";
-	 combo_cw {
-            timeout-ms = <COMBO_TIMEOUT>;
-            key-positions = <6 30>;
-            bindings = <&nayeon>;
+        Grave {
+            bindings = <&kp GRAVE>;
+            key-positions = <22 21>;
+        };
+
+        Backslash {
+            bindings = <&kp BACKSLASH>;
+            key-positions = <34 33>;
+        };
+
+        Semicolon {
+            bindings = <&kp SEMICOLON>;
+            key-positions = <32 33>;
         };
     };
 };
 
 / {
-        bht: balanced_hold_taps {
+    behaviors {
+        hrml: hrml {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HRML";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            hold-trigger-key-positions = <6 18 19 20 21 30 31 32 33 39 40 41 6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41>;
+            tapping-term-ms = <200>;
+        };
+
+        hrmr: hrmr {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HRMR";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38>;
+        };
+                bht: balanced_hold_taps {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             tapping-term-ms = <280>;    // <---[[moderate duration]]
@@ -48,96 +54,37 @@
             require-prior-idle-ms = <150>;
         };
     };
-/ {
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-        tri_layer {
-            if-layers = <1 2>;
-            then-layer = <4>;
-        };
-    };
 };
 
 / {
-        keymap {
-                compatible = "zmk,keymap";
+    keymap {
+        compatible = "zmk,keymap";
 
-                DEF_layer {
-                        display-name = "Base";
-                        bindings = <
-// ╭───────────────╥───────────────┬───────────────┬───────────────┬───────────────┬───────────────╮   ╭───────────────┬───────────────┬───────────────┬───────────────┬───────────────╥───────────────╮
-    &kp TAB         &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &lt FN P        &kp DEL
-// ├───────────────╫───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤   ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────╫───────────────┤
-    &mo NAV         &bht LG(A) A    &kp S           &kp D           &bht LG(F) F    &kp G               &kp H           &kp J           &kp K           &kp L           &kp RET         &kp RSHFT
-// ├───────────────╫───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤   ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────╫───────────────┤
-    &kp LCTRL       &lt FN Z        &bht LG(X) X    &bht LG(C) C    &bht LG(V) V    &kp B               &kp N           &kp M           &bht SEMI COMMA &bht COLON DOT  &bht EXCL QMARK &kp RALT
-// ├───────────────╫───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤   ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────╫───────────────┤
-                                                    &kp LSHFT       &kp LGUI        &lt NAV SPC         &lt NUM SPC     &kp BSPC        &kp RSHFT
-//                                                 ╰───────────────┼───────────────┴───────────────╯   ╰───────────────┴───────────────┼───────────────╯
-                        >;
-                };
-
-                
-
-                NAV_layer {
-                        display-name = "Navigation";
-                        bindings = <
-//╭──────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭──────╮
-    ___      &kp ESC       &kp LS(LC(TAB)) &kp UP      &kp LC(TAB)    &kp LG(TAB)      ___           ___          &kp UP         ___           ___           ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___      &kp TAB       &kp LEFT      &kp DOWN      &kp RIGHT       ___             ___           &kp LEFT     &kp DOWN      &kp RIGHT      ___           ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___      ___            ___           ___           ___            ___             ___           ___           ___           ___           ___           ___
-//├──────┤ ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯ ├──────┤
-                                          ___           ___            ___             ___           ___          ___
-//                                      ╰────────────╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯─────────────╯                                           
-                        >;
-                };
-
-                FN_layer {
-                        display-name = "Function, F key";
-                        bindings = <
-//╭──────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭──────╮
-    ___        ___         ___           ___           ___          ___              ___            &kp F7        &kp F8        &kp F9         &kp F12       ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___        ___         ___           ___           ___          ___              ___            &kp F4        &kp F5        &kp F6         &kp F11       ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___        ___         ___           ___           ___          ___              ___            &kp F1        &kp F2        &kp F3         &kp F10       ___
-//├──────┤ ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯ ├──────┤
-                                               ___        ___           ___            ___           ___           ___                                       
-//                                           ╰──────╯╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯╰──────╯                                           
-                        >;
-		};
-		
-		        NUM_layer {
-                        display-name = "Number, Symbol";
-                        bindings = <
-//╭──────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭──────╮
-    ___     &bht DQT QMARK &kp LT        &kp EQUAL     &kp GT        &kp BSLH         &mt EXCL EQUAL  &mt PLUS N7 &mt MINUS N8   &mt UNDER N9  &kp RG(P)     ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___     &kp AT        &kp LPAR      &kp DLLR      &kp RPAR      &kp GRAVE         &mt CARET KP_DOT &mt STAR N4  &mt FSLH N5  &mt BSLH N6   ___           ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___     &kp LBRC      &kp LBKT      &kp HASH      &kp RBKT      &kp RBRC          &mt PRCNT N0   &mt PIPE N1   &mt AMPS N2   &kp N3        ___           ___
-//├──────┤ ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯ ├──────┤
-                                         ___           ___           ___             ___           &kp DEL                                                       ___
-//                                     ╰─────────────┴─────────────┴─────────────╯ ╰─────────────┴─────────────╯                                           ╰──────╯
-                        >;
-		};
-
-                        		SYS_layer {
-                        display-name = "Bluetooth, Reset";
-                        bindings = <
-//╭──────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭──────╮
-    ___    &bt BT_SEL 0   &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3   &bt BT_CLR       &bt BT_CLR    &bt BT_SEL 0  ___           ___           ___             ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___     &kp A           ___           ___           ___          &bootloader      &bootloader   ___           ___           ___           &kp A           ___
-//├──────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├──────┤
-    ___     ___           ___           ___           ___           &sys_reset        &sys_reset    ___           ___           ___           ___             ___
-//├──────┤ ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯ ├──────┤
-    ___                                                ___           ___              ___           ___                                                       ___
-//╰──────╯                                           ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯                                           ╰──────╯
-                        >;
-		};
-
+        BASE {
+            bindings = <
+&trans  &kp Q               &kp W                 &kp E             &kp R                 &kp T         &kp Y      &kp U  &kp I      &kp O    &kp P             &trans
+&mo 2   &hrml LEFT_SHIFT A  &hrml LEFT_CONTROL S  &hrml LEFT_ALT D  &hrml LEFT_COMMAND F  &kp G         &kp H      &kp J  &kp K      &kp L    &kp SINGLE_QUOTE  &trans
+&trans  &kp Z               &kp X                 &kp C             &kp V                 &kp B         &kp N      &kp M  &kp COMMA  &kp DOT  &kp FSLH          &trans
+                                                  &kp TAB           &kp SPACE             &kp ESCAPE    &kp ENTER  &mo 1  &trans
+            >;
         };
+
+        CHA {
+            bindings = <
+&trans  &kp EXCL          &kp STAR   &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp AT       &kp CARET      &kp N7  &kp N8  &kp N9  &kp DOLLAR   &trans
+&trans  &kp LESS_THAN     &kp MINUS  &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp EQUAL    &kp AMPERSAND  &kp N4  &kp N5  &kp N6  &kp HASH     &trans
+&trans  &kp GREATER_THAN  &kp PLUS   &kp LEFT_BRACE        &kp RIGHT_BRACE        &kp UNDER    &kp N0         &kp N1  &kp N2  &kp N3  &kp PERCENT  &trans
+                                     &trans                &trans                 &trans       &trans         &trans  &trans
+            >;
+        };
+
+        NAV {
+            bindings = <
+&trans  &trans  &kp BSPC  &kp UP    &kp DEL    &trans    &trans        &trans        &trans        &trans        &trans        &sys_reset
+&trans  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans    &trans        &trans        &trans        &trans        &trans        &bootloader
+&trans  &trans  &trans    &trans    &trans     &trans    &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR
+                          &trans    &trans     &trans    &trans        &trans        &trans
+            >;
+        };
+    };
 };
