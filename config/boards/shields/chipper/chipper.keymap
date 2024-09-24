@@ -40,7 +40,6 @@
             require-prior-idle-ms = <200>;
             hold-trigger-on-release;
             hold-while-undecided;
-            hold-while-undecided-linger;
         };
 
         hrmr: hrmr {
@@ -54,7 +53,6 @@
             hold-trigger-key-positions = <0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38>;
             require-prior-idle-ms = <200>;
             hold-trigger-on-release;
-            hold-while-undecided-linger;
             hold-while-undecided;
         };
     };
