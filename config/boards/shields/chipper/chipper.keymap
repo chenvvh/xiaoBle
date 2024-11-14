@@ -5,56 +5,85 @@
 &lt { flavor = "hold-preferred"; };
 
 / {
-    behaviors {
-        hrml: hrml {
-            compatible = "zmk,behavior-hold-tap";
-            label = "HRML";
-            bindings = <&kp>, <&kp>;
-
-            #binding-cells = <2>;
-            hold-trigger-key-positions = <6 18 19 20 21 30 31 32 33 39 40 41 6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41 38>;
-            tapping-term-ms = <180>;
-            flavor = "balanced";
-            require-prior-idle-ms = <200>;
-            hold-trigger-on-release;
-        };
-
-        hrmr: hrmr {
-            compatible = "zmk,behavior-hold-tap";
-            label = "HRMR";
-            bindings = <&kp>, <&kp>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <180>;
-            flavor = "balanced";
-            hold-trigger-key-positions = <0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38>;
-            require-prior-idle-ms = <200>;
-            hold-trigger-on-release;
-        };
-
-        hrm: hrm {
-            compatible = "zmk,behavior-hold-tap";
-            label = "HRM";
-            bindings = <&kp>, <&kp>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "balanced";
-            require-prior-idle-ms = <200>;
-        };
-    };
 };
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        a {
+            bindings = <&kp A>;
+            key-positions = <1 13>;
+            layers = <1>;
+        };
+
+        s {
+            bindings = <&kp S>;
+            key-positions = <2 14>;
+            layers = <1>;
+        };
+
+        d {
+            bindings = <&kp D>;
+            key-positions = <3 15>;
+            layers = <1>;
+        };
+
+        f {
+            bindings = <&kp F>;
+            key-positions = <4 16>;
+            layers = <1>;
+        };
+
+        g {
+            bindings = <&kp G>;
+            key-positions = <5 17>;
+            layers = <1>;
+        };
+
+        h {
+            bindings = <&kp H>;
+            key-positions = <6 18>;
+            layers = <1>;
+        };
+
+        j {
+            bindings = <&kp J>;
+            key-positions = <7 19>;
+            layers = <1>;
+        };
+
+        k {
+            bindings = <&kp K>;
+            key-positions = <8 20>;
+            layers = <1>;
+        };
+
+        l {
+            bindings = <&kp L>;
+            key-positions = <21 9>;
+            layers = <1>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         BASE {
             bindings = <
-&trans  &kp Q   &kp W   &kp E   &kp R  &kp T     &kp Y   &kp U  &kp I   &kp O   &kp P     &kp LBKT
+&to 1   &kp Q   &kp W   &kp E   &kp R  &kp T     &kp Y   &kp U  &kp I   &kp O   &kp P     &kp LBKT
 &trans  &kp A   &kp S   &kp D   &kp F  &kp G     &kp H   &kp J  &kp K   &kp L   &kp SEMI  &kp SINGLE_QUOTE
-&mo 1   &trans  &trans  &trans  &kp C  &kp V     &kp N   &kp M  &trans  &trans  &trans    &trans
+&mo 2   &trans  &trans  &trans  &kp C  &kp V     &kp N   &kp M  &trans  &trans  &trans    &trans
                         &kp C   &kp V  &trans    &trans  &kp N  &kp M
+            >;
+        };
+
+        combobase {
+            bindings = <
+&to 0  &kp Q  &kp W  &kp E      &kp R      &kp T      &kp Y      &kp U      &kp I    &kp O  &kp P  &none
+&none  &kp Z  &kp X  &kp C      &kp V      &kp B      &kp N      &kp M      &none    &none  &none  &none
+&mo 2  &none  &none  &none      &kp ENTER  &kp ESC    &kp SPACE  &kp TAB    &none    &none  &none  &none
+                     &kp ENTER  &kp ESC    &none      &none      &kp SPACE  &kp TAB
             >;
         };
 
@@ -72,8 +101,8 @@
         compatible = "zmk,conditional-layers";
 
         BL {
-            if-layers = <1 1>;
-            then-layer = <1>;
+            if-layers = <2 2>;
+            then-layer = <2>;
         };
     };
 };
